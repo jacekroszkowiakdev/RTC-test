@@ -9,7 +9,7 @@ export type Competitor = {
     name: string;
 };
 
-export type Event = {
+export type SportEvent = {
     id: string;
     status: "PRE" | "LIVE" | "REMOVED";
     scores: Record<string, Score>;
@@ -22,6 +22,8 @@ export type Event = {
     competition: string;
 };
 
+export type InternalEvent = SportEvent & { removed?: boolean };
+
 export type InternalStore = {
-    [eventId: string]: Event & { removed?: boolean };
+    [eventId: string]: InternalEvent;
 };
