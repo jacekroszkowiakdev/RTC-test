@@ -1,0 +1,41 @@
+=== LARGE SCALE MEMORY STORE TEST ===
+Fetching initial dataset...
+
+Phase 1: Adding 500 events...
+Base dataset contains 10 events
+SUCCESS: Added 500 events to memory store
+
+Phase 2: Testing removed flag functionality...
+Marking 50 events as REMOVED...
+
+Phase 3: Verifying removed event filtering...
+Results:
+  Total events in store: 500
+  Active events: 450
+  Removed events: 50
+  Expected removed: 50
+SUCCESS: Removed flag filtering working correctly!
+
+Phase 4: Testing resurrection prevention...
+Attempting to resurrect event c22aedfe-ba9d-49b1-ada1-634de84b69a0-batch0-idx0...
+SUCCESS: Resurrection prevention working - event stayed removed!
+
+Phase 5: Performance testing...
+Get all events: 0.014ms
+Filter active events: 0.673ms
+Performance results with 500 total events
+
+Sample Event:
+Event ID: c22aedfe-ba9d-49b1-ada1-634de84b69a0-batch5-idx0
+Status: PRE
+Sport: FOOTBALL
+Teams: Manchester City B5 vs Barcelona B5
+
+FINAL SUMMARY:
+Total events processed: 500
+Events in store: 500
+Active events: 450
+Removed events: 50
+
+Large scale test completed successfully!
+Exiting...

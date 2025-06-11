@@ -24,6 +24,20 @@ export class MemoryStore {
     public set(event: InternalEvent): void {
         const existingEvent = this.state[event.id];
 
+        if (existingEvent?.removed) {
+            return;
+        }
+
+        if (event.status === "REMOVED") {
+            this.state[event.id] = {
+                ...event,
+                removed: true,
+            };
+
+            console.log(`[REMOVED] Event ${event.id} marked as removed.`);
+            return;
+        }
+
         if (existingEvent) {
             // log status change
             if (existingEvent.status !== event.status) {
@@ -42,10 +56,14 @@ export class MemoryStore {
                     after: event.scores,
                 });
             }
+        } else {
+            console.log(`[NEW] Event ${event.id} added.`);
         }
 
-        // update state with new data
-        this.state[event.id] = event;
+        this.state[event.id] = {
+            ...event,
+            removed: false,
+        };
     }
 }
 export const sharedMemoryStore = new MemoryStore();

@@ -46,3 +46,26 @@ async function runStoreTest() {
 }
 
 runStoreTest();
+
+// Add this to your current test file
+async function debugAPI() {
+    console.log("=== API DEBUG ===");
+
+    const rawState1 = await fetchState();
+    console.log("First call - rawState length:", rawState1.length);
+    console.log("First call - first 200 chars:", rawState1.substring(0, 200));
+
+    const rawState2 = await fetchState();
+    console.log("Second call - rawState length:", rawState2.length);
+    console.log("Second call - first 200 chars:", rawState2.substring(0, 200));
+
+    console.log("Are calls identical?", rawState1 === rawState2);
+
+    const lines1 = rawState1.split("\n").filter((line) => line.trim());
+    const lines2 = rawState2.split("\n").filter((line) => line.trim());
+
+    console.log("First call event count:", lines1.length);
+    console.log("Second call event count:", lines2.length);
+}
+
+debugAPI();
