@@ -9,9 +9,10 @@ export type Competitor = {
     name: string;
 };
 
+export type Status = "PRE" | "LIVE" | "REMOVED";
 export type SportEvent = {
     id: string;
-    status: "PRE" | "LIVE" | "REMOVED";
+    status: Status;
     scores: Record<string, Score>;
     startTime: Date;
     sport: string;

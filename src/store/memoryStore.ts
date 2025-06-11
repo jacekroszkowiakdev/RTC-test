@@ -10,11 +10,14 @@ export class MemoryStore {
 
     // get active events
     public getActiveEvents(): Record<string, SportEvent> {
-        return Object.fromEntries(
-            Object.entries(this.state).filter(
-                ([, event]) => !(event as InternalEvent).removed
-            )
-        );
+        const filtered = Object.entries(this.state).filter(([, event]) => {
+            const isRemoved = (event as InternalEvent).removed;
+            console.log(`Event ${event.id}: removed=${isRemoved}`);
+            return !isRemoved;
+        });
+
+        const result = Object.fromEntries(filtered);
+        return result;
     }
 
     // add or update event
@@ -45,5 +48,4 @@ export class MemoryStore {
         this.state[event.id] = event;
     }
 }
-
 export const sharedMemoryStore = new MemoryStore();

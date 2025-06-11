@@ -1,32 +1,38 @@
-import { SportEvent, Score } from "../types/types";
+import { SportEvent, Score, Status, InternalEvent } from "../types/types";
 
-export function parseRawState(raw: string, rawMappings: string): SportEvent[] {
+export function parseRawState(
+    rawState: string,
+    rawMappings: string
+): InternalEvent[] {
+    // Create mappings object from rawMappings parameter
     const mappings = new Map<string, string>();
 
-    // Parse raw mappings like "id;name"
+    // Parse raw mappings like "id:name;id:name;..."
     rawMappings
         .trim()
-        .split("\n")
-        .forEach((line) => {
-            const [idRaw, nameRaw] = line.split(";");
-            const id = idRaw?.trim();
-            const name = nameRaw?.trim();
+        .split(";")
+        .forEach((mapping) => {
+            const [id, name] = mapping.split(":");
             if (id && name) {
-                mappings.set(id, name);
+                mappings.set(id.trim(), name.trim());
             }
         });
 
-    const rawEventRows = raw.trim().split("\n");
+    // Parse event rows from rawState
+    const rawEventRows = rawState
+        .split("\n")
+        .filter((row) => row.trim() !== "");
 
     return rawEventRows.map((eventRow) => {
         const eventFields = eventRow.split(",");
         const [
             eventId,
-            competitionId,
             sportId,
+            competitionId,
             startTimeRaw,
             homeId,
             awayId,
+            statusId,
             ...scoreFields
         ] = eventFields;
 
@@ -36,15 +42,18 @@ export function parseRawState(raw: string, rawMappings: string): SportEvent[] {
         scoreString.split("|").forEach((entry) => {
             const [type, result] = entry.split("@");
             const [home, away] = result?.split(":") ?? [];
-
             if (type && home && away) {
-                scores[type] = { type, home, away };
+                scores[mappings.get(type) || type] = {
+                    type: mappings.get(type) || type,
+                    home,
+                    away,
+                };
             }
         });
 
         const sportEvent: SportEvent = {
             id: eventId,
-            status: "PRE",
+            status: (mappings.get(statusId) as Status) ?? "PRE",
             startTime: new Date(Number(startTimeRaw)),
             sport: mappings.get(sportId) ?? "Unknown Sport",
             competition: mappings.get(competitionId) ?? "Unknown Competition",
