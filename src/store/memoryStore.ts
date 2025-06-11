@@ -1,6 +1,6 @@
 import { SportEvent, InternalEvent, InternalStore } from "../types/types";
 
-class MemoryStore {
+export class MemoryStore {
     private state: InternalStore = {};
 
     // get raw events
@@ -46,4 +46,4 @@ class MemoryStore {
     }
 }
 
-export const memoryStore = new MemoryStore();
+export const sharedMemoryStore = new MemoryStore();
