@@ -4,6 +4,12 @@ export default defineConfig({
     test: {
         clearMocks: true,
         coverage: {
+            thresholds: {
+                lines: 80,
+                functions: 80,
+                branches: 55,
+                statements: 80,
+            },
             reporter: ["text", "lcov"],
             exclude: [
                 "node_modules/",
