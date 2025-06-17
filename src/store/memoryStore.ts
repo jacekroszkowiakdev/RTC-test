@@ -65,5 +65,9 @@ export class MemoryStore {
             removed: false,
         };
     }
+
+    public clear() {
+        this.state = {};
+    }
 }
 export const sharedMemoryStore = new MemoryStore();
